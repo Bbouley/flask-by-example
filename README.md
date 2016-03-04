@@ -1,13 +1,48 @@
 ### Issues
 
-1. With Heroku Create command (line 144) - Names already taken
+#### Part 1
 
-1. Issues with key not being added when pushing to heroku (line 164) - Could add in line to show how to upload key if necessary?
+ -  With Heroku Create command (line 144) - Names already taken
+
+ -  Issues with key not being added when pushing to heroku (line 164) - Could add in line to show how to upload key if necessary?
 
 ```sh
 heroku keys:add ~/.ssh/id_rsa.pub
 ```
 
+#### Part 3
+
+ - ENV settings from presious session not saved, had to be redeclared when I started the env up again
+
+```sh
+$ export APP_SETTINGS="config.DevelopmentConfig"
+$ export DATABASE_URL="postgresql://localhost/wordcount_dev"
+```
+
+ - When I first display the form, handlbars/jinja templates showing up on page.
+
+
+
+### Notes
+
+ - Templates displaying on page
+ - This shows the code on page, and URL hit doesn't work
+ - Go back and run through code to see if there's anything missing
+ - Error message coming from parser
+
+ ```sh
+ /Users/Penguin/Desktop/myStuff/real-python/flask-by-example/env/lib/python3.5/site-packages/bs4/__init__.py:166: UserWarning: No parser was explicitly specified, so I'm using the best available HTML parser for this system ("html.parser"). This usually isn't a problem, but if you run this code on another system, or in a different virtual environment, it may use a different parser and behave differently.
+
+To get rid of this warning, change this:
+
+ BeautifulSoup([your markup])
+
+to this:
+
+ BeautifulSoup([your markup], "html.parser")
+
+  markup_type=markup_type))
+ ```
 
 
 ### Mini Post
@@ -58,6 +93,7 @@ and now set heroku vars
 $ heroku config:set APP_SETTINGS=config.StagingConfig --remote stage
 $ heroku config:set APP_SETTINGS=config.ProductionConfig --remote pro
 ```
+
 
 
 
