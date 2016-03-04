@@ -19,6 +19,9 @@ $ export APP_SETTINGS="config.DevelopmentConfig"
 $ export DATABASE_URL="postgresql://localhost/wordcount_dev"
 ```
 
+#### Part 4
+
+ - ENV settings have to be redeclared every time user navigates into directory and starts their venv again.
 
 
 ### Notes
