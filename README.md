@@ -12,14 +12,12 @@ heroku keys:add ~/.ssh/id_rsa.pub
 
 #### Part 3
 
- - ENV settings from presious session not saved, had to be redeclared when I started the env up again
+ - ENV settings from previous session not saved, had to be redeclared when I started the env up again
 
 ```sh
 $ export APP_SETTINGS="config.DevelopmentConfig"
 $ export DATABASE_URL="postgresql://localhost/wordcount_dev"
 ```
-
- - When I first display the form, handlbars/jinja templates showing up on page.
 
 
 
