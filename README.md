@@ -22,6 +22,9 @@ $ export DATABASE_URL="postgresql://localhost/wordcount_dev"
 #### Part 4
 
  - ENV settings have to be redeclared every time user navigates into directory and starts their venv again.
+ (go back to set up autoenv in part 1? so these commands run every time you cd into that directory)
+
+
 
 
 ### Notes
