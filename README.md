@@ -99,5 +99,22 @@ $ heroku config:set APP_SETTINGS=config.ProductionConfig --remote pro
 ```
 
 
+### Env vars
+
+To set up our application with environment variables, we're going to use [autoenv](https://github.com/kennethreitz/autoenv). This program allows us to set commands that will run every time we cd into our directory. In order to use it, we will need to install it globally. First, kill your environment in the terminal, install autoenv and add a *.env* file:
+
+```sh
+$ deactivate
+$ pip install autoenv
+$ touch .env
+```
+
+Next, in your .env file, add the following:
+
+```
+source env/bin/activate
+export APP_SETTINGS="config.DevelopmentConfig"
+```
+
 
 
