@@ -111,7 +111,7 @@ This looks a litte bit complex, but let's run through it. We are watching our wo
 
 We then use the d3 object we have access to to run a series of methods in order to create our chart. For each word we get back, we append a div with an attribute of `class = "chart"`. For each div created, we can then use the `.enter()` d3 method. This creates a placeholder element and then gives this reference to the next method in our chain. It allows us to add data dynamically and append to our chart as we loop through our data object.
 
-Finally, we set our styles for each bar element in our chart that we are creating. Adding in a transition for styling, setting the width of each bar in the chart based on the number of times a word has come up in our wordcount, and then setting the text within each bar as the word data and the count. Passing in true means that angular performs a `deep-object-tree` comparison. This allows us the watch to constantly check if a completely new object has been passed into our `scope.wordcounts`.
+Finally, we set our styles for each bar element in our chart that we are creating. Adding in a transition for styling, setting the width of each bar in the chart based on the number of times a word has come up in our wordcount, and then setting the text within each bar as the word data and the count. Right now, the width is set to be the number of times a word has come up * 20 in pixels. Passing in true means that angular performs a `deep-object-tree` comparison. This allows us the watch to constantly check if a completely new object has been passed into our `scope.wordcounts`.
 
 We are now ready to add in our directive into the html of our page, underneath our `row` div.
 
@@ -122,6 +122,10 @@ We are now ready to add in our directive into the html of our page, underneath o
 However, if you load up the page and test it out with a url, you will see that there is only some text at the bottom of the page. What? Well, we haven't actually added any styling to our chart, so right now our function is adding classes that don't have any style to them. Let's add in some css and make this chart look good. Add a *styles.css* file into your static directory and add the following code.
 
 ```css
+#chart {
+  overflow: scroll;
+}
+
 .chart {
     background: #eee;
     padding: 3px;
