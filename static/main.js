@@ -82,8 +82,8 @@
                .data(word[0]).enter()
                .append("div")
                .transition().ease("elastic")
-               .style("width", function(d) { return (data[word] * 20) + "px"; })
-               .text(function(d) {
+               .style("width", function() { return (data[word] * 20) + "px"; })
+               .text(function() {
                   return word + '  :  ' + data[word] ;
                 });
               }
