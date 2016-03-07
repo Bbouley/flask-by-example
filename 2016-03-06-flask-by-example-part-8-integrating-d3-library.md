@@ -123,7 +123,7 @@ However, if you load up the page and test it out with a url, you will see that t
 
 ```css
 #chart {
-  overflow: scroll;
+  overflow-y: scroll;
 }
 
 .chart {
