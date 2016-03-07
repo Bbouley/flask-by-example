@@ -116,5 +116,9 @@ source env/bin/activate
 export APP_SETTINGS="config.DevelopmentConfig"
 ```
 
+Now, if you move up a directory and then cd back into it, your virtual environment will automatically be started and your variable APP_SETTINGS is declared.
+
+
+
 
 
