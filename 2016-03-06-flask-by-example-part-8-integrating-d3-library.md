@@ -147,8 +147,7 @@ However, if you load up the page and test it out with a url, you will see that t
 
 Make sure to include this in the top of your html page with a *link* tag.
 
-Now test out the app and see
-
+Now test out the app and you can see the words being charted underneath our table.
 
 
 ## Conclusion and Next Steps
