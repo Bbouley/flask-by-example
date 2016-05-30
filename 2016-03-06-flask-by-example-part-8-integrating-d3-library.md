@@ -84,42 +84,63 @@ scope.$watch('wordcounts', function() {
 }, true)
 ```
 
-Now we can add in the data to draw our chart. Currently, the data we are getting back from our POST function in our controller is returning an object, so we will have to iterate through that object to get the data out that we can use to draw our chart.
-
-```js
-scope.$watch('wordcounts', function() {
-  var data = scope.wordcounts
-  d3.select('#chart').selectAll('*').remove();
-  for(var word in data) {
-    var chart = d3.select('#chart')
-   .append("div").attr("class", "chart")
-   .selectAll('div')
-   .data(word[0]).enter()
-   .append("div")
-   .transition().ease("elastic")
-   .style("width", function(d) {
-      return (data[word] * 20) + "px";
-    })
-   .text(function(d) {
-      return word + '  :  ' + data[word] ;
-    });
-  }
-}, true)
-```
-
-This looks a litte bit complex, but let's run through it. We are watching our wordcounts data, so every time that changes the function inside the watch will run. The data is set to `scope.wordcounts`. This is the data we get back from out POST function in our controller. We then clear the chart in case there is data left there from previous search queries, so we can append new divs instead of stacking them underneath.
-
-We then use the d3 object we have access to to run a series of methods in order to create our chart. For each word we get back, we append a div with an attribute of `class = "chart"`. For each div created, we can then use the `.enter()` d3 method. This creates a placeholder element and then gives this reference to the next method in our chain. It allows us to add data dynamically and append to our chart as we loop through our data object.
-
-Finally, we set our styles for each bar element in our chart that we are creating. Adding in a transition for styling, setting the width of each bar in the chart based on the number of times a word has come up in our wordcount, and then setting the text within each bar as the word data and the count. Right now, the width is set to be the number of times a word has come up * 20 in pixels. Passing in true means that angular performs a `deep-object-tree` comparison. This allows us the watch to constantly check if a completely new object has been passed into our `scope.wordcounts`.
-
 We are now ready to add in our directive into the html of our page, underneath our `row` div.
 
 ```html
 <word-count-chart data="wordcounts"></word-count-chart>
 ```
 
-However, if you load up the page and test it out with a url, you will see that there is only some text at the bottom of the page. What? Well, we haven't actually added any styling to our chart, so right now our function is adding classes that don't have any style to them. Let's add in some css and make this chart look good. Add a *styles.css* file into your static directory and add the following code.
+Now we can add in the data to draw our chart. Currently, the data we are getting back from our POST function in our controller is returning an object, so we will have to iterate through that object to get the data out that we can use to draw our chart. Before that, let's start with an introduction to the D3 library.
+
+## Intro to D3
+
+D3 has some very useful functionality that we can use to build out bar charts. In vanilla javascript, we traditionally select one element at a time when looking to set its contents.
+
+```js
+var exampleDiv = document.createElement('div');
+exampleDiv.innerHTML = 'This will be the div content';
+document.body.appendChild(exampleDiv);
+```
+
+This code creates a div element, then adds the string to that div and appends it to the body. What we can do with D3 is work with multiple elements at at time. This group of related elements is called 'selections'. We can manipulate several elements at once by querying using a selector by name or by class. For example, if we had multiple `p` elements on a page, we could do something to each one of them with the following code.
+
+```js
+var paragraphs = d3.selectAll('p');
+var exampleDiv = paragraphs.append('div');
+exampleDiv.html('Now all the paragraphs have this text');
+```
+
+The next D3 feature we will cover is called *method chaining*. This feature allows us to apply multiple operations to the same elements. What we can do is select an element and perform several operations on it. Here, we can select an element, append something to it and edit the text in one go.
+
+```js
+d3.select('div')
+  .append('p')
+  .text('New Paragraph');
+```
+
+Note that while most operations will return the same selection (in this case, the div originally selected) when using `.append` we are actually returned a new selection. So above the `.append` works on the first selected item, our `div` element. Then, when we use `.append`, the code that follows will apply to our appended element. Here that is the paragraph element we have added.
+
+##A simple bar chart
+
+Now that we've taken a brief look at some of the methods we can use with D3, let's start to build a simple bar chart. We'll need to build this within our `watch` function. This means that whenever our `scope.wordcounts` data changed, this function will be fired.
+
+```js
+var data = scope.wordcounts
+for (var word in data)
+{
+  d3.select('#chart')
+    .append('div')
+    .selectAll('div')
+      .data(word[0])
+    .enter().append('div')
+}
+```
+
+We currently have an object coming back from our POST function coming back. So what we want to do is select the chart element we are inserting into our html with angular, and then for every word append a new div. However, D3's append method only creates one new element. So what we need to do is use a [data join](https://bost.ocks.org/mike/join/). This will allow us to create a new bar for each data element. So what happens when you run the code now? Wait, nothing shows up? Well although we have a basic chart being built, we havent added any styles yet, so of course, nothing is actually visible. Let's sort that out now.
+
+##Styling our chart
+
+Let's start with some simple css to add a bit of colour to our page.
 
 ```css
 #chart {
@@ -151,7 +172,75 @@ However, if you load up the page and test it out with a url, you will see that t
 
 Make sure to include this in the top of your html page with a *link* tag.
 
-Now test out the app and you can see the words being charted underneath our table.
+```html
+<link rel="stylesheet" type="text/css" href="../static/main.css">
+```
+
+So if we fire up the app in our browser, what's happening now? When you search for a website, you should now see a grey area with some thin blue bars on the left hand side. So you can see that we are generating a bar for each data element we're getting back, there are 10 bars displayed. However, we need to modify our D3 code in order to generate how wide we want each bar to be. We can chain this on to our existing code and use the D3 style function.
+
+```js
+var data = scope.wordcounts
+for (var word in data)
+{
+  d3.select('#chart')
+    .append('div')
+    .attr('class', 'chart')
+    .selectAll('div')
+      .data(word[0])
+    .enter()
+    .append('div')
+      .style('width', function() {
+        return (data[word] * 20) + 'px';
+      })
+      .text(function(d){
+        return word;
+      })
+}
+```
+
+Now we are dynamically creating a width based on the numeric value of how often a word shows up on a webpage.
+
+```js
+.style('width', function() {
+  return (data[word] * 20) + 'px';
+})
+.text(function(d){
+  return word + '  :  ' + data[word];
+})
+```
+
+The style is calculated by returning the value associated with each word, multiplying that number by 20 and then converting it into pixels. We can also add text to each bar element. We can insert the string value of the word plus how often it shows up in that webpage.
+
+So now if we fire up that page, we should see our barchart displayed underneath when we search for a website. There's still one thing missing though. What happens when you search for a new website? Well, that chart is appended underneath our previous one. So we need to clear out our chart div before a new one is created.
+
+```js
+scope.$watch('wordcounts', function() {
+  d3.select('#chart').selectAll('*').remove();
+  var data = scope.wordcounts
+  for (var word in data)
+  {
+    d3.select('#chart')
+      .append('div')
+      .attr('class', 'chart')
+      .selectAll('div')
+        .data(word[0])
+      .enter()
+      .append('div')
+        .style('width', function() {
+          return (data[word] * 20) + 'px';
+        })
+        .text(function(d){
+          return word + '  :  ' + data[word];
+        })
+  }
+}, true)
+```
+
+```js
+d3.select('#chart').selectAll('*').remove();
+```
+
+This line clears our chart each time the `$scope.watch` function is fired. So now we have a chart that is cleared before each new use, and we have a fully functional word-count application!!
 
 
 ## Conclusion and Next Steps

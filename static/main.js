@@ -73,20 +73,39 @@
          link: function (scope) {
 
              scope.$watch('wordcounts', function() {
-              var data = scope.wordcounts
               d3.select('#chart').selectAll('*').remove();
-              for(var word in data) {
-                var chart = d3.select('#chart')
-               .append("div").attr("class", "chart")
-               .selectAll('div')
-               .data(word[0]).enter()
-               .append("div")
-               .transition().ease("elastic")
-               .style("width", function() { return (data[word] * 20) + "px"; })
-               .text(function() {
-                  return word + '  :  ' + data[word] ;
-                });
+              var data = scope.wordcounts
+              for (var word in data)
+              {
+                d3.select('#chart')
+                  .append('div')
+                  .attr('class', 'chart')
+                  .selectAll('div')
+                    .data(word[0])
+                  .enter()
+                  .append('div')
+                    .style('width', function() {
+                      return (data[word] * 20) + 'px';
+                    })
+                    .text(function(d){
+                      return word + '  :  ' + data[word];
+                    })
               }
+
+
+              // d3.select('#chart').selectAll('*').remove();
+              // for(var word in data) {
+              //   var chart = d3.select('#chart')
+              //  .append("div").attr("class", "chart")
+              //  .selectAll('div')
+              //  .data(word[0]).enter()
+              //  .append("div")
+              //  .transition().ease("elastic")
+              //  .style("width", function() { return (data[word] * 20) + "px"; })
+              //  .text(function() {
+              //     return word + '  :  ' + data[word] ;
+              //   });
+              // }
              }, true)
 
          }
